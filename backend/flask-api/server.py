@@ -14,7 +14,7 @@ def get_token_balance():
     address = request.args.get("address")
     params = {
     "chain": chain,
-    "address": address
+     "address": address
     }
 
     result = evm_api.balance.get_native_balance(
@@ -23,6 +23,30 @@ def get_token_balance():
     )
 
     return result
+
+@app.route("/get-user-nfts", methods=["GET"])
+def get_nfts():
+    address = request.args.get("address")
+    chain = request.args.get("chain")
+    params = {
+        "address": address,
+        "chain": chain,
+        "format": "decimal",
+        "limit": 100,
+        "token_addresses": [],
+        "cursor": "",
+        "normalizeMetadata": True,
+    }
+
+    result = evm_api.nft.get_wallet_nfts(
+        api_key=api_key,
+        params=params,
+    )
+
+    # converting it to json because of unicode characters
+    response = json.dumps(result, indent=4)
+    print(response)
+    return response
 
 
 @app.route("/")

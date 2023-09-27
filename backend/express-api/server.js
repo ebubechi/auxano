@@ -5,8 +5,9 @@ const PORT = 5005
 const Moralis = require('moralis').default;
 const {EvmChain} = require('@moralisweb3/common-evm-utils')
 
+
 app.get('/get-token-balance', async (req, res) => {
-    chain = EvmChain.SEPOLIA
+  chain = EvmChain.SEPOLIA
     address = req.query.address
     console.log(chain + address)
     try {
@@ -26,6 +27,29 @@ app.get('/get-token-balance', async (req, res) => {
       }
 })
 
+app.get('/get-user-nfts', async (req, res) => {
+  chain = EvmChain.SEPOLIA
+  address = req.query.address
+  try{
+    await Moralis.start({
+      apiKey: "KVUjiwZZQHfBN3ttK7lPeSmmWdsAq2yyoDGfB12qkmqpoWrfjwWsH478ewzmk4n3"
+    });
+    const response = await Moralis.EvmApi.nft.getWalletNFTs({
+      "address": address,
+      "chain": chain,
+      "format": "decimal",
+      "limit": 100,
+      "tokenAddresses": [],
+      "cursor": "",
+      "normalizeMetadata": true,
+    })
+
+    console.log(response.raw)
+    return res.json(response.raw)
+  }catch (e){
+    console.error(e)
+  }
+})
 
 app.get('/', (req, res) => {
     res.json({'message': 'Hello, Node!'})

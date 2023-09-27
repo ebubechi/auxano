@@ -34,12 +34,38 @@ def get_token_balance(req):
     "address": address
     }
 
-    result = evm_api.balance.get_native_balance(
+    response = evm_api.balance.get_native_balance(
     api_key=api_key,
     params=params,
     )
 
-    return Response(result)
+    return Response(response)
+
+@api_view(["GET"])
+def get_user_nfts(req):
+    address = req.GET["address"]
+    chain = req.GET["chain"]
+    params = {
+        "address": address,
+        "chain": chain,
+        "format": "decimal",
+        "limit": 100,
+        "token_addresses": [],
+        "cursor": "",
+        "normalizeMetadata": True,
+    }
+
+    result = evm_api.nft.get_wallet_nfts(
+        api_key=api_key,
+        params=params,
+    )
+
+    # converting it to json because of unicode characters
+    data = json.dumps(result, indent=4)
+    response = json.loads(data)
+    print(response)
+    return Response(response)
+
 
 @api_view(['GET', 'POST'])
 def hello_world(req):
@@ -51,4 +77,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', hello_world),
     path('get-token-balance/', get_token_balance),
+    path('get-user-nfts/', get_user_nfts),
 ]
