@@ -14,7 +14,7 @@ class WalletPage extends StatefulWidget {
   const WalletPage({Key? key}) : super(key: key);
 
   @override
-   createState() => _WalletPageState();
+  createState() => _WalletPageState();
 }
 
 class _WalletPageState extends State<WalletPage> {
@@ -34,14 +34,15 @@ class _WalletPageState extends State<WalletPage> {
     if (privateKey != null) {
       final walletProvider = WalletProvider();
       await walletProvider.loadPrivateKey();
-      EthereumAddress address =  walletProvider.getPublicKey(privateKey);
-      log(address.hex);
+      EthereumAddress address = walletProvider.getPublicKey(privateKey);
       setState(() {
         walletAddress = address.hex;
         pvKey = privateKey;
       });
-      log(pvKey);
+      log("$walletAddress wallet Address");
+      log("$pvKey PrivateKey");
       String response = await getBalances(address.hex, 'sepolia');
+      log("$response Response");
       dynamic data = json.decode(response);
       String newBalance = data['balance'] ?? '0';
 
@@ -50,9 +51,10 @@ class _WalletPageState extends State<WalletPage> {
           EtherAmount.fromBigInt(EtherUnit.wei, BigInt.parse(newBalance));
       String latestBalanceInEther =
           latestBalance.getValueInUnit(EtherUnit.ether).toString();
-
+      log('${latestBalanceInEther}bal');
       setState(() {
         balance = latestBalanceInEther;
+        // balance = "0";
       });
     }
   }

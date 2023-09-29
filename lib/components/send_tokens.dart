@@ -4,6 +4,7 @@ import 'dart:math' show pow;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:web3dart/web3dart.dart';
+import 'package:auxano/constants/contants.dart';
 
 class SendTokensPage extends StatelessWidget {
   final String privateKey;
@@ -61,14 +62,16 @@ class SendTokensPage extends StatelessWidget {
   }
 
   void sendTransaction(String receiver, EtherAmount txValue) async {
-    var apiUrl = "Your RPC Url"; // Replace with your API
+    // var apiUrl = "http://$uri"; // Replace with your API
+    var apiUrl = uri; // Replace with your API
     // Replace with your API
     var httpClient = http.Client();
     var ethClient = Web3Client(apiUrl, httpClient);
 
     EthPrivateKey credentials = EthPrivateKey.fromHex('0x$privateKey');
-
+    log('credentials $credentials');
     EtherAmount etherAmount = await ethClient.getBalance(credentials.address);
+    log('Eth Amt ${etherAmount.toString()}');
     EtherAmount gasPrice = await ethClient.getGasPrice();
 
     log(etherAmount.toString());

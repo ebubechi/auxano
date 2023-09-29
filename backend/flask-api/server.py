@@ -44,7 +44,8 @@ def get_nfts():
     )
 
     # converting it to json because of unicode characters
-    response = json.dumps(result, indent=4)
+    data = json.dumps(result, indent=4)
+    response = json.loads(s=data)
     print(response)
     return response
 
@@ -52,3 +53,6 @@ def get_nfts():
 @app.route("/")
 def hello_world():
     return {"message": "Hello, Flask!"} 
+
+if __name__ == "__main__":
+    app.run(host="192.168.43.166", port=5000, debug=True)

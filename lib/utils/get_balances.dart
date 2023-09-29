@@ -1,7 +1,8 @@
+import 'package:auxano/constants/contants.dart';
 import 'package:http/http.dart' as http;
 
 Future<String> getBalances(String address, String chain) async {
-  final url = Uri.http('192.168.43.166:5002', '/get_token_balance', {
+  final url = Uri.http(uri, '/get-token-balance', {
     'address': address,
     'chain': chain,
   });
